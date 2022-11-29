@@ -349,5 +349,4 @@ A figure could be several images, a code snippet, audio, video, equations, a tab
 Summing up: if an image has meaning, in terms of your content, you should use an HTML image. If an image is purely decoration, you should use CSS background images.  
 
 
-
-
+test upstream
