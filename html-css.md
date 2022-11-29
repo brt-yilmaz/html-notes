@@ -324,5 +324,30 @@ footer: `<footer>`.
 
 [To validate Html code](https://validator.w3.org/)
 
+__Note__ : Search engines also read image filenames and count them towards SEO. Therefore, you should give your image a descriptive filename; dinosaur.jpg is better than img835.png.  
+
+If the image is described adequately by the main text body, you can just use alt="".
+
+A better solution, is to use the HTML `<figure>` and `<figcaption>` elements. These are created for exactly this purpose: to provide a semantic container for figures, and to clearly link the figure to the caption. Our above example could be rewritten like this:
+
+```html
+<figure>
+  <img
+    src="images/dinosaur.jpg"
+    alt="The head and torso of a dinosaur skeleton;
+            it has a large head with long sharp teeth"
+    width="400"
+    height="341" />
+
+  <figcaption>
+    A T-Rex on display in the Manchester University Museum.
+  </figcaption>
+</figure>
+```
+A figure could be several images, a code snippet, audio, video, equations, a table, or something else.  
+
+Summing up: if an image has meaning, in terms of your content, you should use an HTML image. If an image is purely decoration, you should use CSS background images.  
+
+
 
 
