@@ -1,4 +1,4 @@
-# From MDN
+# From MDN (https://developer.mozilla.org/en-US/)
 
 The `<head>` element. This element acts as a container for everything you want to include on the HTML page, that isn't the content the page will show to viewers.  
 
@@ -344,9 +344,145 @@ A better solution, is to use the HTML `<figure>` and `<figcaption>` elements. Th
   </figcaption>
 </figure>
 ```
+
 A figure could be several images, a code snippet, audio, video, equations, a table, or something else.  
 
 Summing up: if an image has meaning, in terms of your content, you should use an HTML image. If an image is purely decoration, you should use CSS background images.  
 
+The `<video>` element allows you to embed a video very easily. A really simple example looks like this:  
 
-test upstream
+```html
+<video src="rabbit320.webm" controls>
+  <p>
+    Your browser doesn't support HTML video. Here is a
+    <a href="rabbit320.webm">link to the video</a> instead.
+  </p>
+</video>
+```
+You must either use the `controls` attribute to include the browser's own control interface, or build your interface using the appropriate JavaScript API. At a minimum, the interface must include a way to start and stop the media, and to adjust the volume.  
+
+This is called fallback content — this will be displayed if the browser accessing the page doesn't support the `<video>` element, allowing us to provide a fallback for older browsers.  
+
+```html
+<video controls>
+  <source src="rabbit320.mp4" type="video/mp4" />
+  <source src="rabbit320.webm" type="video/webm" />
+  <p>
+    Your browser doesn't support this video. Here is a
+    <a href="rabbit320.mp4">link to the video</a> instead.
+  </p>
+</video>
+```
+Each `<source>` element also has a type attribute. This is optional, but it is advised that you include it.  
+browsers can use the `type` to immediately skip videos they don't understand. If `type` isn't included, browsers will load and try to play each file until they find one that works, which obviously takes time and is an unnecessary use of resources.  
+
+other example
+
+```html
+<video
+  controls
+  width="400"
+  height="400"
+  autoplay
+  loop
+  muted
+  preload="auto"
+  poster="poster.png">
+  <source src="rabbit320.mp4" type="video/mp4" />
+  <source src="rabbit320.webm" type="video/webm" />
+  <p>
+    Your browser doesn't support this video. Here is a
+    <a href="rabbit320.mp4">link to the video</a> instead.
+  </p>
+</video>
+```
+
+`autoplay` Makes the audio or video start playing right away, while the rest of the page is loading. You are advised not to use autoplaying video (or audio) on your sites, because users can find it really annoying.  
+
+`loop` Makes the video (or audio) start playing again whenever it finishes. This can also be annoying, so only use if really necessary.  
+
+`muted` Causes the media to play with the sound turned off by default.  
+
+`poster` The URL of an image which will be displayed before the video is played. It is intended to be used for a splash screen or advertising screen.  
+
+`preload` Used for buffering large files; it can take one of three values:
+
+"none" does not buffer the file  
+"auto" buffers the media file  
+"metadata" buffers only the metadata for the file.  
+
+The `<audio>`  element doesn't support the width/height attributes  `poster` attribute  — again, there is no visual component, so there is nothing to assign a width or height to.  
+
+```html
+<video controls>
+  <source src="example.mp4" type="video/mp4" />
+  <source src="example.webm" type="video/webm" />
+  <track kind="subtitles" src="subtitles_es.vtt" srclang="es" label="Spanish" />
+</video>
+```
+
+Note: Text tracks also help you with SEO, since search engines especially thrive on text. Text tracks even allow search engines to link directly to a spot partway through the video.  
+
+```html
+<head>
+  <style>
+    iframe {
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <iframe
+    src="https://developer.mozilla.org/en-US/docs/Glossary"
+    width="100%"
+    height="500"
+    allowfullscreen
+    sandbox>
+    <p>
+      <a href="/en-US/docs/Glossary">
+        Fallback link for browsers that don't support iframes
+      </a>
+    </p>
+  </iframe>
+</body>
+```
+
+```html
+<head>
+  <style>
+    iframe {
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <iframe
+    src="https://developer.mozilla.org/en-US/docs/Glossary"
+    width="100%"
+    height="500"
+    allowfullscreen
+    sandbox>
+    <p>
+      <a href="/en-US/docs/Glossary">
+        Fallback link for browsers that don't support iframes
+      </a>
+    </p>
+  </iframe>
+</body>
+```
+
+Fallback content: 
+In the same way as other similar elements like `<video>`, you can include fallback content between the opening and closing `<iframe></iframe>` tags that will appear if the browser doesn't support the `<iframe>`. In this case, we have included a link to the page instead. It is unlikely that you'll come across any browser that doesn't support `<iframe>`s these days.  
+
+Note: In order to improve speed, it's a good idea to set the iframe's src attribute with JavaScript after the main content is done with loading. This makes your page usable sooner and decreases your official page load time (an important SEO metric.)  
+
+Rules for `<iframe>` : 
+
+- Only embed when necessary.  
+- Use HTTPS : HTTPS prevents embedded content from accessing content in your parent document, and vice versa.  
+- Always use the `sandbox` attribute : Unsandboxed content can do way too much (executing JavaScript, submitting forms, popup windows, etc.) By default, you should impose all available restrictions by using the sandbox attribute with no parameters, as shown in our previous example.   
+
+If absolutely required, you can add permissions back one by one (inside the `sandbox=""` attribute value) — see the sandbox reference entry for all the available options. One important note is that you should never add both `allow-scripts` and `allow-same-origin` to your sandbox attribute — in that case, the embedded content could bypass the Same-origin policy that stops sites from executing scripts, and use JavaScript to turn off sandboxing altogether.  
+- Configure CSP directives : This can prevent other websites from embedding your content in their web pages (which would enable clickjacking and a host of other attacks).  
+
+The `<embed>` and `<object>` elements serve a different function to `<iframe>` — these elements are general purpose embedding tools for embedding external content, such as PDFs.
