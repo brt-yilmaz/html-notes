@@ -1,4 +1,4 @@
-# From MDN (https://developer.mozilla.org/en-US/)
+# HTML From [MDN](https://developer.mozilla.org/en-US/)
 
 The `<head>` element. This element acts as a container for everything you want to include on the HTML page, that isn't the content the page will show to viewers.  
 
@@ -485,4 +485,185 @@ Rules for `<iframe>` :
 If absolutely required, you can add permissions back one by one (inside the `sandbox=""` attribute value) — see the sandbox reference entry for all the available options. One important note is that you should never add both `allow-scripts` and `allow-same-origin` to your sandbox attribute — in that case, the embedded content could bypass the Same-origin policy that stops sites from executing scripts, and use JavaScript to turn off sandboxing altogether.  
 - Configure CSP directives : This can prevent other websites from embedding your content in their web pages (which would enable clickjacking and a host of other attacks).  
 
-The `<embed>` and `<object>` elements serve a different function to `<iframe>` — these elements are general purpose embedding tools for embedding external content, such as PDFs.
+The `<embed>` and `<object>` elements serve a different function to `<iframe>` — these elements are general purpose embedding tools for embedding external content, such as PDFs.  
+
+Raster images are defined using a grid of pixels — a raster image file contains information showing exactly where each pixel is to be placed, and exactly what color it should be. Popular web raster formats include Bitmap (.bmp), PNG (.png), JPEG (.jpg), and GIF (.gif.).  
+
+Vector images are defined using algorithms — a vector image file contains shape and path definitions that the computer can use to work out what the image should look like when rendered on the screen. The **SVG** format allows us to create powerful vector graphics for use on the Web.  
+
+For creating SVG images, most people use a vector graphics editor like [Inkscape](https://inkscape.org/) or [Illustrator](https://en.wikipedia.org/wiki/Adobe_Illustrator).  
+
+SVG has some additional advantages besides those described so far:  
+
+- Text in vector images remains accessible (which also benefits your SEO).  
+
+- SVGs lend themselves well to styling/scripting, because each component of the image is an element that can be styled via CSS or scripted via JavaScript.  
+
+So why would anyone want to use raster graphics over SVG? Well, SVG does have some disadvantages:  
+
+- SVG can get complicated very quickly, meaning that file sizes can grow; complex SVGs can also take significant processing time in the browser.  
+
+- SVG can be harder to create than raster images, depending on what kind of image you are trying to create.SVG can be harder to create than raster images, depending on what kind of image you are trying to create.  
+
+- To embed an SVG via an <img> element, you just need to reference it in the src attribute as you'd expect. You will need a height or a width attribute (or both if your SVG has no inherent aspect ratio)(quick way)  
+
+```html
+<img
+  src="equilateral.svg"
+  alt="triangle with all three sides equal"
+  height="87"
+  width="100" />
+```
+Quick Way's :  
+Pros:
+
+- Quick, familiar image syntax with built-in text equivalent available in the alt attribute.
+- You can make the image into a hyperlink easily by nesting the `<img>` inside an `<a>` element.
+- The SVG file can be cached by the browser, resulting in faster loading times for any page that uses the image loaded in the future.
+
+Cons:  
+- You cannot manipulate the image with JavaScript.
+- If you want to control the SVG content with CSS, you must include inline CSS styles in your SVG code. (External stylesheets invoked from the SVG file take no effect.)
+- You cannot restyle the image with CSS pseudoclasses (like :focus).  
+
+- You can also use SVGs as CSS background images, as shown below. In the below code, older browsers will stick with the PNG that they understand, while newer browsers will load the SVG: 
+
+```html
+background: url("fallback.png") no-repeat center;
+background-image: url("image.svg");
+background-size: contain;
+```
+
+- If your SVGs aren't showing up at all, it might be because your server isn't set up properly. If that's the problem.  
+
+You can also open up the SVG file in a text editor, copy the SVG code, and paste it into your HTML document — this is sometimes called putting your SVG inline, or inlining SVG. Make sure your SVG code snippet begins with an `<svg>` start tag and ends with an `</svg>` end tag. Here's a very simple example of what you might paste into your document:
+
+```html
+<svg width="300" height="200">
+  <rect width="100%" height="100%" fill="green" />
+</svg>
+``` 
+
+Pros:  
+
+- Putting your SVG inline saves an HTTP request, and therefore can reduce a bit your loading time.
+- You can assign classes and ids to SVG elements and style them with CSS, either within the SVG or wherever you put the CSS style rules for your HTML document. In fact, you can use any SVG presentation attribute as a CSS property.
+- Inlining SVG is the only approach that lets you use CSS interactions (like :focus) and CSS animations on your SVG image (even in your regular stylesheet.)
+- You can make SVG markup into a hyperlink by wrapping it in an `<a>` element.  
+
+We can however use two attributes — `srcset` and `sizes` — to provide several additional source images along with hints to help the browser pick the right one.  
+
+```html
+<img
+  srcset="elva-fairy-480w.jpg 480w, elva-fairy-800w.jpg 800w"
+  sizes="(max-width: 600px) 480px,
+         800px"
+  src="elva-fairy-800w.jpg"
+  alt="Elva dressed as a fairy" />
+```  
+**Note**: For the slot width, rather than providing an absolute width (for example, `480px`), you can alternatively provide a width relative to the viewport (for example, `50vw`) — but **NOT** a percentage. You may have noticed that the last slot width has no media condition (this is the default that is chosen when none of the media conditions are true). The browser ignores everything after the first matching condition, so be careful how you order the media conditions.  
+
+Older browsers that don't support these features will just ignore them. Instead, those browsers will go ahead and load the image referenced in the src attribute as normal.
+
+If you're supporting multiple display resolutions, but everyone sees your image at the same real-world size on the screen, you can allow the browser to choose an appropriate resolution image by using `srcset` with x-descriptors and without `sizes` — a somewhat easier syntax! 
+
+```html
+<img
+  srcset="elva-fairy-320w.jpg, elva-fairy-480w.jpg 1.5x, elva-fairy-640w.jpg 2x"
+  src="elva-fairy-640w.jpg"
+  alt="Elva dressed as a fairy" />
+```
+
+if css `widht` is there, `sizes` is not needed — the browser works out what resolution the display is that it is being shown on, and serves the most appropriate image referenced in the `srcset`.  
+
+It would probably be better to show a smaller, portrait image on mobile, which zooms in on the person. The `<picture>` element allows us to implement just this kind of solution.  
+
+```html
+<picture>
+  <source media="(max-width: 799px)" srcset="elva-480w-close-portrait.jpg" />
+  <source media="(min-width: 800px)" srcset="elva-800w.jpg" />
+  <img src="elva-800w.jpg" alt="Chris standing up holding his daughter Elva" />
+</picture>
+```
+
+In all cases, you must provide an `<img>` element, with `src` and `alt`, right before `</picture>`, otherwise no images will appear. This provides a default case that will apply when none of the media conditions return true (you could actually remove the second `<source>` element in this example), and a fallback for browsers that don't support the `<picture>` element.  
+
+**Note**: You should use the media attribute only in art direction scenarios; when you do use media, don't also offer media conditions within the sizes attribute.  
+
+you couldn't load the `<img>` element, then detect the viewport width with JavaScript, and then dynamically change the source image to a smaller one if desired. By then, the original image would already have been loaded, and you would load the small image as well, which is even worse in responsive image terms.  
+
+New image formats like `WebP` and `AVIF` can maintain a low file size and high quality at the same time. These formats now have relatively broad browser support but little "historical depth".
+
+`<picture>` lets us continue catering to older browsers. You can supply MIME types inside `type` attributes so the browser can immediately reject unsupported file types:  
+```html
+<picture>
+  <source type="image/svg+xml" srcset="pyramid.svg" />
+  <source type="image/webp" srcset="pyramid.webp" />
+  <img
+    src="pyramid.png"
+    alt="regular pyramid built from four equilateral triangles" />
+</picture>
+```
+- Do not use the `media` attribute, unless you also need art direction.
+- In a `<source>` element, you can only refer to images of the type declared in `type`.
+- Use comma-separated lists with `srcset` and `sizes`, as needed. 
+
+---
+
+This section from [Jason Grigsby](https://cloudfour.com/thinks/responsive-images-101-part-5-sizes/) (use this section for responsive images):  
+
+The `sizes` attribute is required any time you use `srcset` width descriptors. In fact, sizes only makes sense if you’re using the width descriptors. If you’re using the display density descriptors, you don’t need the sizes attribute. The browser won’t know what to do with it.  
+
+```html
+<img src="cat.jpg" alt="cat"
+  srcset="cat-160.jpg 160w, cat-320.jpg 320w, cat-640.jpg 640w, cat-1280.jpg 1280w"
+  sizes="(max-width: 480px) 100vw, (max-width: 900px) 33vw, 254px">
+```
+Srcset and sizes = Smart browsers.  
+
+```html
+<picture>
+  <source media="(min-width: 900px)" srcset="cat-vertical.jpg">
+  <source media="(min-width: 750px)" srcset="cat-horizontal.jpg">
+  <img src="cat.jpg" alt="cat">
+</picture>
+```
+The value of the `media` attribute is a media query. Unlike the `media` condition that the `sizes` attribute uses, this is the full media query. As the browser looks through the list of source elements, the first source whose media query matches is the one that is used. If no media queries match, then the `<img>` element is used.  
+
+*Media attribute is a directive, not a suggestion*  This is why the element with the media attribute is perfect for art direction.  
+
+```html
+<picture>
+  <source srcset="homepage-person@desktop.png, homepage-person@desktop-2x.png 2x"       
+          media="(min-width: 990px)">
+  <source srcset="homepage-person@tablet.png, homepage-person@tablet-2x.png 2x" 
+          media="(min-width: 750px)">
+  <img srcset="homepage-person@mobile.png, homepage-person@mobile-2x.png 2x" 
+       alt="Shopify Merchant, Corrine Anestopoulos">
+</picture>
+```
+
+- `source … media=”(min-width: 990px)”`> — The largest image size, which Shopify calls desktop, is the first source. The media attribute tells the browser that this source should only be used if the viewport is larger than or equal to 990 pixels wide.
+- `source … media=”(min-width: 750px)”`> — The second source, the “tablet” image, will be used for viewports larger than or equal to 750 pixels. Because the first source takes effect at 990 pixels and the browser selects the first source that matches, the effective range of the second source is from 750 to 989 pixels.
+- `<img>` — If there are no matches for the two sources, then the viewport must be smaller than 750 pixels wide. When that is the case, the srcset on the <img> element will be used. This “mobile” image is the cropped image used for small screens.  
+
+for different type :
+```html
+<picture>
+  <source type="image/svg+xml" srcset="logo.xml">
+  <source type="image/webp" srcset="logo.webp"> 
+  <img src="logo.png" alt="ACME Corp">
+</picture>
+```
+
+---
+
+Using tables for layout rather than CSS layout techniques is a bad idea. The main reasons are as follows:
+
+- Layout tables reduce accessibility for visually impaired users: screen readers, used by blind people, interpret the tags that exist in an HTML page and read out the contents to the user. Because tables are not the right tool for layout, and the markup is more complex than with CSS layout techniques, the screen readers' output will be confusing to their users.
+- Tables produce tag soup: As mentioned above, table layouts generally involve more complex markup structures than proper layout techniques. This can result in the code being harder to write, maintain, and debug.
+- Tables are not automatically responsive: When you use proper layout containers (such as `<header>`, `<section>`, `<article>`, or `<div>`), their width defaults to 100% of their parent element. Tables on the other hand are sized according to their content by default, so extra measures are needed to get table layout styling to effectively work across a variety of devices.  
+
+The `scope` attribute, which can be added to the `<th>` element to tell screen readers exactly what cells the header is a header for.  
+
+
